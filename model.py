@@ -154,7 +154,7 @@ def buildModel_U_net (input_dim):
     return model
 
 
-def train(x, y):
+def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="model.h5"):
     import tensorflow as tf 
     from tensorflow.keras import layers, regularizers
     from keras.constraints import max_norm, unit_norm
@@ -162,16 +162,11 @@ def train(x, y):
     from keras.callbacks import TensorBoard
     from keras.callbacks import ModelCheckpoint
 
-    lr = 3e-4 
-    batch_size = 32 * 2
-    epochs = 500
-
     # define the checkpoint
-    filepath = "model.h5"
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
 
-    model = buildModel_U_net((1000, 5))
+    model = buildModel_FCRN_A_v2((length, channels))
     opt = tf.keras.optimizers.Adam(lr=lr)
     model.compile(loss='mse',optimizer=opt,metrics='accuracy')
     print(model.summary())
@@ -191,9 +186,11 @@ def train(x, y):
     plt.legend(['train','val'])
     plt.savefig('loss.png', bbox_inches='tight')
 
+    return model
+
 
 def evaluate(model_path, x):
-    model = load_model('model_complete.h5')
+    model = load_model(model_path)
     return model.predict(x)
 
 
