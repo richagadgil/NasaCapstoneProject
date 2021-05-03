@@ -67,7 +67,7 @@ for i in range(3):
   x.extend(np.array(all_channels[[15,16,17,18,19]]))
   x.extend(np.array(all_channels[[20,21,22,23,24]]))
 
- !pip freeze | grep plotly
+!pip freeze | grep plotly
 
 pd.options.plotting.backend = "plotly" 
 
@@ -86,7 +86,7 @@ def show_spectra(view_range,spect,modes, spectra_sample=True):
     fig.add_vline(x=mode, line_width=1, line_color="green") #requires plotly 4.12 and above
   fig.show()
 
- modes = [x[0]*length for x in spectra['omega_total_save']]
+modes = [x[0]*length for x in spectra['omega_total_save']]
 show_spectra((int(500000), int(501000)), labeled_modes, modes)
 
 
