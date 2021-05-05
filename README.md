@@ -6,5 +6,5 @@ model.py:
 
 peak_detection.py:
 
-bin_metrics.py: 
+bin_metrics.py: generates plots and performance metrics 
 
