@@ -103,8 +103,12 @@ def bin_metrics(predicted_modes, modes, num_bins=20):
   avg_missed = sum(diff)/num_bins 
   avg_direction = int(pred_direction)/num_bins
 
+  x_bins=list(range(num_bins))
+  poly = np.polyfit(x_bins, peaks_detected_count,1)
+  actual_poly = np.polyfit(x_bins, peaks_detected, 1)
+
   # put diff metrics in dictionary 
-  result_dict = {'average_missed': avg_missed, 'total_missed': total_missed, 'error_direction': avg_direction}
+  result_dict = {'average_missed': avg_missed, 'total_missed': total_missed, 'error_direction': avg_direction, 'predicted_slope':poly[0], 'actual_slope':actual_poly[0]}
 
   print("Each bin on average misses %f modes" % avg_missed)
   print("This model missed a total of %d modes" % total_missed)
@@ -113,6 +117,7 @@ def bin_metrics(predicted_modes, modes, num_bins=20):
     print("On average, each bin tends to overpredict the number of modes by %f" % avg_direction)
   else:
     print("On average, each bin tends to underpredict the number of modes by %f" % avg_direction)
+  
   return result_dict
 
 # examples
