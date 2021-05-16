@@ -30,8 +30,6 @@ else:
 
 spec = np.abs(spec)
 X, y = get_feature_set(spec, modes, width = int(args[3]), length = int(args[4]),verbose=True)
-X = X.astype(int)
-y = np.array(y).astype(int)
 
 print('feature set generated.')
 print('training model...')
