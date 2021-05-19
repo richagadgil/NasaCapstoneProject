@@ -180,7 +180,6 @@ def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="
 
     history = model.fit(x, y, batch_size=batch_size,epochs=epochs,validation_split=0.1,verbose=True, callbacks=callbacks_list)
 
-    print(model.summary())
 
     #model.save("my_model")
 
