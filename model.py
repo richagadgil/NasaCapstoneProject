@@ -154,7 +154,7 @@ def buildModel_U_net (input_dim):
     return model
 
 
-def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="model.h5"):
+def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="model.h5", model_type="FRCN_A_v2"):
     import tensorflow as tf 
     from tensorflow.keras import layers, regularizers
     from keras.constraints import max_norm, unit_norm
@@ -170,8 +170,10 @@ def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="
       model = load_model(filepath)
     else:
       print("No model checkpoint, starting from scratch...")
-      model = buildModel_FCRN_A((length, channels))
-
+      if (model_type == "FRCN_A"):
+        model = buildModel_FCRN_A((length, channels))
+      else:
+        model = buildModel_FCRN_A_v2((length, channels))
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
     opt = tf.keras.optimizers.Adam(lr=lr)
