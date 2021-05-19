@@ -171,8 +171,10 @@ def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="
     else:
       print("No model checkpoint, starting from scratch...")
       if (model_type == "FRCN_A"):
+        print("Loading Model FRCN-A")
         model = buildModel_FCRN_A((length, channels))
       else:
+        print("Loading Model FRCN-A-v2")
         model = buildModel_FCRN_A_v2((length, channels))
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
@@ -181,7 +183,6 @@ def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="
     print(model.summary())
 
     history = model.fit(x, y, batch_size=batch_size,epochs=epochs,validation_split=0.1,verbose=True, callbacks=callbacks_list)
-
 
     #model.save("my_model")
 
