@@ -10,6 +10,7 @@ Original file is located at
 """
 
 import plotly.graph_objects as go
+import numpy as np
 from scipy import integrate
 
 """
