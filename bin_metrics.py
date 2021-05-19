@@ -22,7 +22,7 @@ args:
   [default 1000000] number of modes: int
   [default True] integral: plot cumulative number of modes detected 
 
-returns: predicted and actual mode counts for each bin: dict{str:list}
+returns: None
 """
 def bin_plot(predicted_modes, modes, num_bins=20, num_modes = 1000000, integral=True):
   peaks_detected_count = []
@@ -68,15 +68,43 @@ def bin_plot(predicted_modes, modes, num_bins=20, num_modes = 1000000, integral=
                    yaxis_title='Cumulative Number of Modes')
     fig.show()
 
-  predictions_dict = {'actual': peaks_detected, 'predicted': peaks_detected_count}
-  return predictions_dict
-
 
 
 # examples
 
 #bin_plot(predicted_modes, modes)
 #bin_plot(predicted_modes, modes, num_bins = 15, integral = False) 
+
+"""
+bin_counts: Plots the actual and predicted number of modes for different segments of the spectra
+          known as bins. 
+args: 
+  predicted modes: list, 
+  actual modes: list, 
+  [default 20] number of bins: int 
+  [default 1000000] number of modes: int
+  [default True] integral: plot cumulative number of modes detected 
+
+returns: predicted and actual mode counts for each bin: dict{str:list}
+"""
+
+def bin_counts(predicted_modes, modes, num_bins=20, num_modes = 1000000):
+  peaks_detected_count = []
+  peaks_detected = []
+
+  for s in range(num_bins):
+   window_peaks = [i for i in predicted_modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
+   peaks_detected_count.append(len(window_peaks))
+   window_peaks = [i for i in modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
+   peaks_detected.append(len(window_peaks))
+    
+  predictions_dict = {'actual': peaks_detected, 'predicted': peaks_detected_count}
+  return predictions_dict
+
+# examples
+
+#bin_counts(predicted_modes, modes)
+#bin_counts(predicted_modes, modes, num_bins = 15)
 
 """
 bin_metrics: Calculates three different performance metrics based on the bins.  
