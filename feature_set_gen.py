@@ -10,13 +10,13 @@ Original file is located at
 import numpy as np
 import pandas as pd
 
-def gen_ideal(spectra, verbose = False):
+def gen_ideal(spectra, mode_loc, verbose = False):
   labeled_modes=[]
-  for i in range(spectra['Dm_total_save'].shape[2]):
+  for i in range(spectra.shape[2]):
     if verbose: print("spectra number: "+str(i))
     amp=[]
-    length = np.shape(spectra['Dm_total_save'])[0]
-    modes = [x[i]*length for x in spectra['omega_total_save']]
+    length = np.shape(spectra)[0]
+    modes = [x[i]*length for x in mode_loc]
     seeker = 0
     modes = np.sort(modes)
     for j in range(length):
@@ -38,9 +38,9 @@ def gen_ideal(spectra, verbose = False):
 # training set generation
 def get_train(spectra, width = 5, length = 1000):
   train_set = []
-  for i in range(spectra['Dm_total_save'].shape[2]):
-    all_channels = pd.DataFrame(np.transpose(np.transpose(spectra['Dm_total_save'])[i]))
-    channel_num = spectra['Dm_total_save'].shape[1]
+  for i in range(spectra.shape[2]):
+    all_channels = pd.DataFrame(np.transpose(np.transpose(spectra)[i]))
+    channel_num = spectra.shape[1]
     channel_sets = int(channel_num/width)*width
     x = []
     for s in np.reshape(range(channel_sets),(int(channel_sets/width),width)):
@@ -48,13 +48,14 @@ def get_train(spectra, width = 5, length = 1000):
     train_set.append(x)
   return train_set
 
-def get_train_test(spectra, width = 5, length = 1000):
+def get_feature_set(spectra, modes, width = 5, length = 1000,verbose=False):
   print("generating ideal spectra...")
-  ideal = gen_ideal(spectra)
+  ideal = gen_ideal(spectra,modes,verbose)
   print("generating training set...")
   train = get_train(spectra, width=width, length = length)
   print("reshaping data...")
-  x = np.reshape(train, (np.prod(np.shape(train)[:4]),width))
+  x = np.reshape(train, (np.prod(np.shape(train)[:3]),length,width))
+
   y = []
   for i in range(np.shape(train)[0]):
     for j in range(np.shape(train)[1]):
