@@ -170,7 +170,7 @@ def train(x, y, length, channels, batch_size=64, lr=3e-4, epochs=500, filepath="
       model = load_model(filepath)
     else:
       print("No model checkpoint, starting from scratch...")
-      model = buildModel_FCRN_A_v2((length, channels))
+      model = buildModel_FCRN_A((length, channels))
 
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
     callbacks_list = [checkpoint]
