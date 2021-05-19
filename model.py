@@ -122,7 +122,7 @@ def buildModel_FCRN_A (input_dim):
     density_pred =  Convolution1D(1, 1, activation='linear',\
                                   name='pred')(act_)
     # =========================================================================
-    model = Model (input = input_, output = density_pred)
+    model = Model (inputs = input_, outputs = density_pred)
     opt = SGD(lr = 1e-2, momentum = 0.9, nesterov = True)
     model.compile(optimizer = opt, loss = 'mse')
     return model
