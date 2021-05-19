@@ -18,18 +18,20 @@ bin_plot: Plots the actual and predicted number of modes for different segments 
 args: 
   predicted modes: list, 
   actual modes: list, 
-  [default] number of bins: int 
+  [default 20] number of bins: int 
+  [default 1000000] number of modes: int
+  [default True] integral: plot cumulative number of modes detected 
 
 returns: None  
 """
-def bin_plot(predicted_modes, modes, num_bins=20, integral=True):
+def bin_plot(predicted_modes, modes, num_bins=20, num_modes = 1000000, integral=True):
   peaks_detected_count = []
   peaks_detected = []
 
   for s in range(num_bins):
-   window_peaks = [i for i in predicted_modes if (i >= s * 1000000/num_bins) and (i < (s+1) * 1000000/num_bins)]
+   window_peaks = [i for i in predicted_modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
    peaks_detected_count.append(len(window_peaks))
-   window_peaks = [i for i in modes if (i >= s * 1000000/num_bins) and (i < (s+1) * 1000000/num_bins)]
+   window_peaks = [i for i in modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
    peaks_detected.append(len(window_peaks))
 
   x_bins=list(range(num_bins))
@@ -66,30 +68,35 @@ def bin_plot(predicted_modes, modes, num_bins=20, integral=True):
                    yaxis_title='Cumulative Number of Modes')
     fig.show()
 
+  predictions_dict = {'actual': peaks_detected, 'predicted': peaks_detected_count}
+  return predictions_dict
+
 
 
 # examples
 
 #bin_plot(predicted_modes, modes)
-#bin_plot(predicted_modes, modes, 15, False)
+#bin_plot(predicted_modes, modes, num_bins = 15, integral = False) 
 
 """
 bin_metrics: Calculates three different performance metrics based on the bins.  
 args: 
   predicted modes: list, 
   actual modes: list, 
-  [default] number of bins: int 
+  [default 20] number of bins: int 
+  [default 1000000] number of modes: int
 
 returns: 
   dict: average number of modes missed by each bin, total number of modes missed, and direction of error  
 """
-def bin_metrics(predicted_modes, modes, num_bins=20):
+
+def bin_metrics(predicted_modes, modes, num_bins=20,  num_modes=1000000):
   peaks_detected_count = []
   peaks_detected = []
   for s in range(num_bins):
-    window_peaks = [i for i in predicted_modes if (i >= s * 1000000/num_bins) and (i < (s+1) * 1000000/num_bins)]
+    window_peaks = [i for i in predicted_modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
     peaks_detected_count.append(len(window_peaks))
-    window_peaks = [i for i in modes if (i >= s * 1000000/num_bins) and (i < (s+1) * 1000000/num_bins)]
+    window_peaks = [i for i in modes if (i >= s * num_modes/num_bins) and (i < (s+1) * num_modes/num_bins)]
     peaks_detected.append(len(window_peaks))
 
   diff = []
@@ -124,4 +131,3 @@ def bin_metrics(predicted_modes, modes, num_bins=20):
 
 #bin_metrics(predicted_modes, modes)
 #bin_metrics(predicted_modes, modes, 30)
-
