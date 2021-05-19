@@ -22,7 +22,7 @@ args:
   [default 1000000] number of modes: int
   [default True] integral: plot cumulative number of modes detected 
 
-returns: None  
+returns: predicted and actual mode counts for each bin: dict{str:list}
 """
 def bin_plot(predicted_modes, modes, num_bins=20, num_modes = 1000000, integral=True):
   peaks_detected_count = []
